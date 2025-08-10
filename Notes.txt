@@ -152,3 +152,128 @@ app.use("/test",
 });
 
 * wrap inside array doesn't do anything.
+
+
+app.get("/hello", (req, res, next) => {
+    //res.send("Hellooooooo sindhu");
+    next();
+});
+
+app.get("/hello", (req, res, next) => {
+    //res.send("Hellooooooo sindhu 2222222");
+    next();
+});
+
+app.get("/hello", (req, res, next) => {
+    //res.send("Hellooooooo sindhu 3333333");
+    next();
+});
+
+o/p throw error : Cannot GET /hello
+* over come this issue we are using middleware
+
+* Middleware : a function that is accessible to the request, 
+    response objects and the next middleware function. 
+    It can execute any code, terminate the request-response cycle, 
+    make needed changes in req and res objects, and detect errors.
+
+* Route Handler : A single callback function can handle a route.
+
+//Handle auth middleware for all request GET, POST, DELETE
+app.use("/admin"); //app.all("/admin");
+
+* Difference btw all and use (homework)
+
+//Handle auth middleware for all request GET, POST, DELETE
+app.use("/admin", (req, res, next) => {
+    //Logic of checking if the request is authorized
+    const token = req.query.token;//read post data
+    const isAuthorised =  token === "sindhu";
+    if(!isAuthorised){
+        res.status(403).send("unauthorised");
+    }else{
+        next();
+    }
+}); //app.all("/admin");
+
+app.get("/user", (req, res) => {
+    res.send("Fetch user data");
+});//here admin middleware wont call because it will not match /admin
+
+app.get("/admin/getAllUserData", (req, res) => {
+    res.send("Get all the data");
+});
+
+app.get("/admin/deleteUser", (req, res) => {
+    res.send("User deleted successfully");
+});
+
+* Work with middleWare app.js
+const {adminAuth, userAuth} = require("./middlewares/auth");
+app.use("/admin", adminAuth);
+app.use("/user", userAuth);
+
+app.get("UserLogin", (req, res) => {
+    res.send("Login page");
+});
+
+app.get("/userData", userAuth, (req, res) => {// either call middle ware like this or use app.use("/user/userData"........;
+    res.send("Fetch user data");
+});//here admin middleware wont call because it will not match /admin
+
+app.get("/admin/getAllUserData", (req, res) => {
+    res.send("Get all the data");
+});
+
+app.get("/admin/deleteUser", (req, res) => {
+    res.send("User deleted successfully");
+});
+
+* Middleware/auth.js
+const adminAuth = (req, res, next) => {
+    const token = req.query.token;
+    const isAuthorised =  token === "admin";
+    if(!isAuthorised){
+        res.status(403).send("unauthorised");
+    }else{
+        next();
+    }
+}
+
+const userAuth = (req, res, next) => {
+    const token = req.query.token;
+    const isAuthorised =  token === "user";
+    if(!isAuthorised){
+        res.status(403).send("unauthorised");
+    }else{
+        next();
+    }
+}
+
+
+module.exports = 
+{
+    adminAuth,
+    userAuth
+}
+
+//db call and get user data
+app.get("/getData", (req, res) => {
+    throw new Error("Something went wrong");
+});
+
+app.get("/getDataError", (req, res) => {
+    try{
+        throw new Error("Something went wrong");
+    }catch (error) {
+        res.send(500).send("Something error");
+    }
+});
+
+//error handling in the middleware
+app.get("/getUserData", (err, req, res, next) => { // error should be first parameter, req, res, next
+    if(err){
+        //log your error
+        res.status(500).send("Something went wrong");
+    }
+});
