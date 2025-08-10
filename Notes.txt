@@ -1,0 +1,87 @@
+
+------------------------
+session-3
+------------------------
+
+//create new project
+terminal 
+ - npm init
+
+connect server express js
+ - npm i express
+
+to stop we can't use cntl+c every time so we are using nodemon, it will resrat the server when changes done.
+ - sudo npm i -g nodemon (because we are isntaling global level thats why we are using -g and permission issue we are using sudo)
+ - nodemon src/app.js insted of node src/app.js
+ - added the scripts : nodemon src/app.js so we can use npm run start
+
+* node modules : is a place when we install some packages and it get the code form internet and put it here
+* package.json will also update when ever we did npm i install package
+* dependencies : without that package project won't work properly ex : express for nodejs
+* all dependencis store inside node_modules.
+* package-lock.json : to lock the installed package version.
+
+* the ^ (caret) symbol, which is the default for new dependencies and allows for both minor and patch updates while locking the major version. For example, ^1.2.3 would allow 1.3.0 or 1.4.0 but not 2.0.0.
+
+* The ~ (tilde) symbol in package.json is used to specify a version range for a project's dependencies, indicating that the project can use any version of the package within the same minor version, allowing for patch updates. eg : ~1.2.3 allows 1.2.4, 1.2.5, etc
+
+--------------------------
+session - 4
+--------------------------
+app.use("/", (req, res) => {
+    res.send("This is home page");
+}); 
+- it will override every thing, anything match after slash it will handle like if i run localhost:port/hello i will get thiso utput only.
+- this handler not only handle / it will handle anything match start with /anything
+- if i change order of execution it will work fine. 
+example : 
+app.use("/test", (req, res) => {
+    res.send("heloo nodeJs server");
+});
+app.use("/hello", (req, res) => {
+    res.send("heloo sindhu");
+});
+- order of the routes matter.
+
+HTTP methods:
+
+app.use : it will match all the HTTP method API calls to /test
+app.use("/test", (req, res) => {
+    res.send("heloo sindhu");
+});
+
+app.post : it will only handle POST to /user 
+app.post("/user", (req, res) => {
+    console.log(req);
+    res.send(req);
+});
+
+app.get : it will only handle GET to /user 
+app.get("/test", (req, res) => {
+    res.send("heloo sindhu");
+});
+
+app.get("/a(b?)c", (req, res) => {
+    res.send("Matches /abc or /ac");
+});
+? means the preceding character is optional
+So /ab?c matches /ac or /abc. b? → “b is optional”
+it won’t work in Express 5 without parentheses or escaping because path-to-regexp is stricter now
+in Express 5.x, path-to-regexp v6 doesn’t allow regex-style groups like (b?) in plain strings anymore.
+
+//get query params data
+app.post("/queryParams", (req, res) => {
+    res.send(req.query);
+}); o/p => { "name": "sindhu" }
+
+//http://localhost:8000/queryParams/107
+app.post("/queryParams/:userId", (req, res) => {
+    res.send(req.params);
+}); o/p => { "userId": "107"}
+
+//http://localhost:8000/queryParams/107/sindhu67ty
+app.post("/queryParams/:userId/:password", (req, res) => {
+    res.send(req.params);
+});
+
+o/p => { "userId": "107", "password": "sindhu67ty" }

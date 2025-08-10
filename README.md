@@ -47,6 +47,7 @@ to stop we can't use cntl+c every time so we are using nodemon, it will resrat t
  - sudo npm i -g nodemon (because we are isntaling global level thats why we are using -g and permission issue we are using sudo)
  - nodemon src/app.js insted of node src/app.js
  - added the scripts : nodemon src/app.js so we can use npm run start
+
 * node modules : is a place when we install some packages and it get the code form internet and put it here
 * package.json will also update when ever we did npm i install package
 * dependencies : without that package project won't work properly ex : express for nodejs
