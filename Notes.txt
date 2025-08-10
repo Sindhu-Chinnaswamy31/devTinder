@@ -21,9 +21,11 @@ to stop we can't use cntl+c every time so we are using nodemon, it will resrat t
 * all dependencis store inside node_modules.
 * package-lock.json : to lock the installed package version.
 
-* the ^ (caret) symbol, which is the default for new dependencies and allows for both minor and patch updates while locking the major version. For example, ^1.2.3 would allow 1.3.0 or 1.4.0 but not 2.0.0.
+* the ^ (caret) symbol, which is the default for new dependencies and allows for both minor and patch updates while locking the major version. 
+For example, ^1.2.3 would allow 1.3.0 or 1.4.0 but not 2.0.0.
 
-* The ~ (tilde) symbol in package.json is used to specify a version range for a project's dependencies, indicating that the project can use any version of the package within the same minor version, allowing for patch updates. eg : ~1.2.3 allows 1.2.4, 1.2.5, etc
+* The ~ (tilde) symbol in package.json is used to specify a version range for a project's dependencies,
+ indicating that the project can use any version of the package within the same minor version, allowing for patch updates. eg : ~1.2.3 allows 1.2.4, 1.2.5, etc
 
 --------------------------
 session - 4
@@ -85,3 +87,68 @@ app.post("/queryParams/:userId/:password", (req, res) => {
 });
 
 o/p => { "userId": "107", "password": "sindhu67ty" }
+
+
+--------------------------
+session - 5
+--------------------------
+-> One request handler can have multple request handler inside 
+ex :    app.use("/test", (req, res) => {
+            res.send("router handler 1");
+        }, (req, res) => {
+            res.send("router handler 2");
+        }, (req, res)=>{
+            res.send("router handler 3");
+        });
+output : router handle 1
+
+* if the first res is not return it will not go to next req it will simply load infinit loop.
+* if we call next parameter it will print the next response, next is passed as third argument and we need to call that function next ()
+// if we want to run multiple request handler
+app.use("/test", (req, res, next) => {
+    //res.send("router handler 1");
+    next();
+}, (req, res, next) => {
+    // res.send("router handler 2");
+    next()
+}, (req, res)=>{
+    res.send("router handler 3");
+});
+
+* we should never write like this it will give error.
+* here we are getting error because we are sending response to client request already fulfilled,
+so using this method is not a good idea
+// if we want to run multiple request handler
+app.use("/test", (req, res, next) => {
+    next();  
+    res.send("router handler 1");
+}, (req, res, next) => {
+    res.send("router handler 2");
+    next()
+}, (req, res)=>{
+    res.send("router handler 3");
+});
+
+output : router handler 2
+
+* it will directly go to next router it won't print the first router.
+* if we call next() then only next router handler will call.
+* if we are in last response we are not sending any response so we will get error Cannot GET /test.
+* we are calling next() express expecting next route handler so it can't find it will throw error.
+* we can also pass array of function. it will behave same.
+app.use("/test", 
+[(req, res, next) => {
+    next(); //it will call next request handler
+    res.send("router handler 1");
+}, (req, res, next) => {
+    res.send("router handler 2");
+    next()
+}], (req, res, next)=>{
+    res.send("router handler 3");
+    next();
+}, (req, res, next)=>{
+    res.send("router handler 4");
+    next();
+});
+
+* wrap inside array doesn't do anything.
