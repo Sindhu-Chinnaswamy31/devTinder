@@ -402,3 +402,20 @@ connectDB()
 * _id : is a unique id which is given by mongoo
 * __v : a version key added by Mongoose to documents in MongoDB.
 
+
+------------------------------
+diving into api session - 7
+------------------------------
+HW : Difference bwt json and javscript objects
+json takes key value as string but in javascript object key is not a string.
+json can't take comma at the end but json object will take
+
+*  console.log(req.body); => give us a undefind because we sent json data, 
+the data sent in json formate and our server is not bale to read that json data to read that we need middleware.
+* That middleware convert json data into javascript object.
+* expressJSON middleware : app.use(express.json()) // this will convert the data
+
+*Difference bwt findOne and find
+findOne -> give you one user
+find -> will give you all the matched user in array
+{returnDocument: "before"} in console it fetch the data before data and console if we put after it will update and return the document after update
