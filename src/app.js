@@ -1,48 +1,39 @@
 const server = require("express");
-
+const connectDB = require("./config/database");
 const app = server();
-//Handle auth middleware for all request GET, POST, DELETE
-// const {adminAuth, userAuth} = require("./middlewares/auth");
-// app.use("/admin", adminAuth);
-// app.use("/user", userAuth);
+const UserModel = require("./models/user");
 
-// app.get("UserLogin", (req, res) => {
-//     res.send("Login page");
-// });
+//POST API
+app.post("/signUp", async (req, res) => {
+    const userObj = {
+        firstName: "Sindhu",
+        lastName: "Chinnaswamy",
+        email: "sindhu@gmail.com",
+        password: "sindhu@123",
+        phoneNumber: "9876543210",
+        gender: "female",
+        age: 28,
+        bio: "i am a software developer",
+        status: "active"
+    }
 
-// app.get("/userData", userAuth, (req, res) => {// either call middle ware like this or use app.use("/user/userData"........;
-//     res.send("Fetch user data");
-// });//here admin middleware wont call because it will not match /admin
-
-// app.get("/admin/getAllUserData", (req, res) => {
-//     res.send("Get all the data");
-// });
-
-// app.get("/admin/deleteUser", (req, res) => {
-//     res.send("User deleted successfully");
-// });
-
-//db call and get user data
-app.get("/getData", (req, res) => {
-    throw new Error("Something went wrong");
-});
-
-app.get("/getDataError", (req, res) => {
+    //create a instance of user model
+    const user = new UserModel(userObj);
     try{
-        throw new Error("Something went wrong");
-    }catch (error) {
-        res.send(500).send("Something error");
+        await user.save(); // instance of model
+        res.send("User added succesfully!");
+    }catch(err){
+        console.log(err);
     }
 });
 
-//error handling in the middleware
-app.get("/getUserData", (err, req, res, next) => { // error should be first parameter, req, res, next
-    if(err){
-        //log your error
-        res.status(500).send("Something went wrong");
-    }
-});
+connectDB()
+    .then(() => {
+        console.log("Database connected")
+        app.listen(8000, () =>{
+            console.log("Server is running on port 8000");
+        });
+    })
+    .catch((err) => console.log(err));
 
-app.listen(8000, () =>{
-    console.log("Server is running on port 8000");
-});
+

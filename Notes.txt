@@ -277,3 +277,128 @@ app.get("/getUserData", (err, req, res, next) => { // error should be first para
         res.status(500).send("Something went wrong");
     }
 });
+
+
+------------------------------
+database_mongoose session - 6
+------------------------------
+* Cluster conncetion issue 
+* mango db website change the IP address 49.207.203.144/32
+
+* instal mongoose
+npm install mongoose
+
+* Create folder inside the src > config > database.js
+const database = require("mongoose"); // returns a promise
+
+const connectDB = async () => {
+    await database.connect("mongodb+srv://sindhucswamy:WIDvHhmL38FR2VSS@cluster0.vf5zi2b.mongodb.net/devTinder");//if we not mention db name it will default take the cluster
+}
+
+connectDB()
+    .then(() => console.log("Database connected"))
+    .catch((err) => console.log(err));
+
+* connect to our project 
+const server = require("express");
+require("./config/database");
+
+const app = server();
+
+app.listen(8000, () =>{
+    console.log("Server is running on port 8000");
+});
+
+* First conenct the database then only connect server.
+
+database.js
+-------------
+const database = require("mongoose"); // returns a promise
+
+const connectDB = async () => {
+    await database.connect("mongodb+srv://sindhucswamy:WIDvHhmL38FR2VSS@cluster0.vf5zi2b.mongodb.net/devTinder");
+}
+
+module.exports = connectDB;
+
+App.js
+--------------
+const server = require("express");
+const connectDB = require("./config/database");
+
+const app = server();
+
+connectDB()
+    .then(() => {
+        console.log("Database connected")
+        app.listen(8000, () =>{
+            console.log("Server is running on port 8000");
+        });
+    })
+    .catch((err) => console.log(err));
+
+* schema : identity for the collection document, ex : defining the table user, what can user have pawword, lastname, phonenumber.....
+* Creating schema
+ > src/models/user.js
+ const mongoose = require("mongoose");
+
+const userSchema = new mongoose.Schema({ //schema for user collection
+    firstName: {
+        type: String,
+        required: true
+    },
+    lastname: {
+        type : String,
+        required: false
+    }
+});
+
+module.exports = mongoose.model("User", userSchema);
+
+* POST method is best to create API
+
+app.js //signup
+------------
+const server = require("express");
+const connectDB = require("./config/database");
+const app = server();
+const UserModel = require("./models/user");
+//crete a route / API
+//Sign API
+app.post("/signUp", async (req, res) => {
+    const userObj = {
+        firstName: "Sindhu",
+        lastName: "Chinnaswamy",
+        email: "sindhu@gmail.com",
+        password: "sindhu@123",
+        phoneNumber: "9876543210",
+        gender: "female",
+        age: 28,
+        bio: "i am a software developer",
+        status: "active"
+    }
+
+    //create a instance of user model
+    const user = new UserModel(userObj);
+    try{
+        await user.save(); // instance of model
+        res.send("User added succesfully!");
+    }catch(err){
+        console.log(err);
+    }
+
+});
+
+connectDB()
+    .then(() => {
+        console.log("Database connected")
+        app.listen(8000, () =>{
+            console.log("Server is running on port 8000");
+        });
+    })
+    .catch((err) => console.log(err));
+
+
+* _id : is a unique id which is given by mongoo
+* __v : a version key added by Mongoose to documents in MongoDB.
+
