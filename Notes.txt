@@ -484,3 +484,13 @@ immutable: boolean, defines path as immutable. Mongoose prevents you from changi
 * API level validation
 
 * npm i validator : we can use this library 
+
+* never trust req.body
+
+-------------------------------
+encryption password session - 9
+-------------------------------
+* validating data
+* Encryp the password and then store this into database
+* encrypt the passwrod use bcrypt
+npm install bcrypt

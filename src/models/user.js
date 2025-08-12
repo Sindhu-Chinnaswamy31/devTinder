@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({ //schema for user collection
     },
     lastName: {
         type: String,
-        required: false, 
+        required: true, 
         minLength: 3,
         maxLength: 20
     },
@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({ //schema for user collection
     password: {
         type: String,
         required: true,
-        maxValue: 12,
+        maxValue: 50,
         minValue: 10,
         validate(value){
             if(!validator.isStrongPassword(value)){
@@ -160,11 +160,11 @@ const userSchema = new mongoose.Schema({ //schema for user collection
             }
         }
     },
-    createAt: {
-        type: Date,
-        required: false,
-        default: Date.now
-    },
+    // createAt: {
+    //     type: Date,
+    //     required: false,
+    //     default: Date.now
+    // },
 }, {timestamps: true});
 
 //model
