@@ -479,3 +479,8 @@ immutable: boolean, defines path as immutable. Mongoose prevents you from changi
 * validate will only work for new data not for existing data.
 * we need to update the validation for patch request also.
         const user = await UserModel.findByIdAndUpdate({_id: UserId}, body, {returnDocument: "before", runValidators: true});
+
+
+* API level validation
+
+* npm i validator : we can use this library 

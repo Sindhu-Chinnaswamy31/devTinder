@@ -73,10 +73,23 @@ app.delete("/deleteUser", async (req, res) => {
     }
 });
 
+const ALLOWED_UPDATE_FIELDS = ["firstName", "lastName", "phoneNumber", "gender", "age", "interestedIn"];
+
 //update data of teh user
-app.patch("/updateUserData", async (req, res) => {
-    const UserId = req.body.userId;
+app.patch("/updateUserData/:userId", async (req, res) => {
+    const UserId = req.params?.userId;
     const body = req.body;
+
+    const updates = Object.keys(body);
+    const isValidOperation = updates.every((update) => ALLOWED_UPDATE_FIELDS.includes(update));
+
+    if(!isValidOperation){
+        return res.status(400).send({error: "Update not allowed for this field"});
+    }
+
+    if(data?.interestedIn.length > 10){
+        return res.status(400).send({error: "You cannot add more than 10 skills"});
+    }
     
     try{
         const user = await UserModel.findByIdAndUpdate({_id: UserId}, body, {returnDocument: "before", runValidators: true});

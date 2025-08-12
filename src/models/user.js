@@ -1,5 +1,6 @@
 const { default: mongoose } = require("mongoose");
 const database = require("mongoose");
+const validator = require("validator");
 
 const userSchema = new mongoose.Schema({ //schema for user collection
     firstName: {
@@ -19,13 +20,23 @@ const userSchema = new mongoose.Schema({ //schema for user collection
         required: true,
         unique: true,
         lowercase: true,
-        trim: true
+        trim: true,
+        validate(value){
+            if(!validator.isEmail(value)){
+                throw new Error("Invalid email " + value);
+            }
+        }
     },
     password: {
         type: String,
         required: true,
         maxValue: 12,
-        minValue: 10
+        minValue: 10,
+        validate(value){
+            if(!validator.isStrongPassword(value)){
+                throw new Error("Password should be strong");
+            }
+        }
     },
     phoneNumber: {
         type: Number,
@@ -142,7 +153,12 @@ const userSchema = new mongoose.Schema({ //schema for user collection
     profilePicture: {
         type: String,
         required: false,
-        default: "https://cdn.pixabay.com/photo/2024/05/26/10/15/bird-8788491_1280.jpg"
+        default: "https://cdn.pixabay.com/photo/2024/05/26/10/15/bird-8788491_1280.jpg",
+        validate(value){
+            if(!validator.isURL(value)){
+                throw new Error("Invalid URL : " + value);
+            }
+        }
     },
     createAt: {
         type: Date,
