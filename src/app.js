@@ -6,6 +6,7 @@ const { validateSignUpData } = require("./utils/validation");
 const bcrypt = require("bcrypt");
 
 app.use(server.json())
+
 //POST API
 app.post("/signUp", async (req, res) => {
     try{
@@ -37,6 +38,27 @@ app.post("/signUp", async (req, res) => {
         res.send("User added succesfully!");
     }catch(err){
        res.status(400).send(err.message);
+    }
+});
+
+//login API
+
+app.post("/login", async (req,res) => {
+    try{
+        const {email, password} = req.body;
+        const user = await UserModel.findOne({email});
+        if(user){
+            const result = await bcrypt.compare(password, user.password);
+            if(result){
+                return res.send("Login successful");
+            }else{
+                throw new Error("Invalid credentials");
+            }
+        }else{
+            throw new Error("User not found");
+        }
+    }catch(err){
+        res.status(400).send(err.message);
     }
 });
 
