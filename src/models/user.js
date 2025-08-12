@@ -4,31 +4,47 @@ const database = require("mongoose");
 const userSchema = new mongoose.Schema({ //schema for user collection
     firstName: {
         type: String,
-        required: true
+        required: true,
+        minLength: 3,
+        maxLength: 20
     },
     lastName: {
         type: String,
-        required: true
+        required: false, 
+        minLength: 3,
+        maxLength: 20
     },
     email: {
         type: String,
-        required: true
+        required: true,
+        unique: true,
+        lowercase: true,
+        trim: true
     },
     password: {
         type: String,
-        required: true
+        required: true,
+        maxValue: 12,
+        minValue: 10
     },
     phoneNumber: {
-        type: String,
+        type: Number,
         required: true
     },
     gender: {
         type: String,
-        required: true
+        required: true,
+        validate(value) {
+            if(value !== "male" && value !== "female" && value !== "other"){
+                throw new Error("Gender should be male, female or other");
+            }
+        }
     },
     age: {
         type: Number,
-        required: true
+        required: true,
+        max: 80,
+        min: 18
     },
     bio: {
         type: String,
@@ -36,10 +52,11 @@ const userSchema = new mongoose.Schema({ //schema for user collection
     },
     location: {
         type: String,
-        required: false
+        required: false,
+        default: "India"
     },
     interestedIn: {
-        type: String,
+        type: [String],
         required: false
     },
     lookingFor: {
@@ -124,9 +141,15 @@ const userSchema = new mongoose.Schema({ //schema for user collection
     },
     profilePicture: {
         type: String,
-        required: false
-    }
-});
+        required: false,
+        default: "https://cdn.pixabay.com/photo/2024/05/26/10/15/bird-8788491_1280.jpg"
+    },
+    createAt: {
+        type: Date,
+        required: false,
+        default: Date.now
+    },
+}, {timestamps: true});
 
 //model
 const UserModel = mongoose.model("User", userSchema);

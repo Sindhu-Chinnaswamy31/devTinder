@@ -13,7 +13,7 @@ app.post("/signUp", async (req, res) => {
         await user.save(); // instance of model
         res.send("User added succesfully!");
     }catch(err){
-        console.log(err);
+       res.send(err);
     }
 });
 
@@ -27,7 +27,7 @@ app.get("/userData", async (req, res) => {
             res.send(users);
         }
     }catch(err){
-        console.log(err);
+        res.send(err);
     }
 })
 
@@ -41,7 +41,7 @@ app.get("/feed", async (req, res) => {
             res.send(users);
         }
     }catch(err){
-        console.log(err);
+        res.send(err);
     }
 });
 
@@ -55,7 +55,7 @@ app.get("/findById", async (req, res) => {
             res.send(users);
         }
     }catch(err){
-        console.log(err);
+        res.send(err);
     }
 });
 
@@ -69,7 +69,7 @@ app.delete("/deleteUser", async (req, res) => {
             res.status(200).send("User deleted successfully");
         }
     }catch(err){
-        console.log(err);
+        res.send(err);
     }
 });
 
@@ -79,7 +79,7 @@ app.patch("/updateUserData", async (req, res) => {
     const body = req.body;
     
     try{
-        const user = await UserModel.findByIdAndUpdate({_id: UserId}, body, {returnDocument: "before"});
+        const user = await UserModel.findByIdAndUpdate({_id: UserId}, body, {returnDocument: "before", runValidators: true});
         console.log(user);
 
         if(user == null){
@@ -88,7 +88,7 @@ app.patch("/updateUserData", async (req, res) => {
             res.status(200).send("User updated successfully");
         }
     }catch(err){
-        console.log(err);
+        res.send(err);
     }
 });
 
