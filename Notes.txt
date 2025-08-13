@@ -494,3 +494,18 @@ encryption password session - 9
 * Encryp the password and then store this into database
 * encrypt the passwrod use bcrypt
 npm install bcrypt
+
+--------------------------------------
+authentication jwt token session - 10
+--------------------------------------
+jwt token : json web token
+cookies :
+session : 
+* when ever user is loggin in server create token and attached the cookie send back, 
+now that cookie will be stored by browser any request that comming up next that cookie will be sent along,
+and we will validate again  and then do anything we want to do.
+* cookie-parser : 
+npm i cookie-parser
+
+*json web token - jwt 
+npm i jsonwebtoken
