@@ -509,3 +509,20 @@ npm i cookie-parser
 
 *json web token - jwt 
 npm i jsonwebtoken
+
+* expiresIn: "1d" -> here we can expire the token
+* expires: new Date(Date.now() + 24 * 60 * 60 * 1000) cookie will expire in 1 day
+
+****** magoose schema methods ********
+* User Schema defines the User. i can attach the few methods on to the schema that is applicable for all users.
+* In a schema, creating small functions/methods is useful because they let you add custom behavior to your model.
+Main uses:
+- Reusability – You can call the same logic in many places without rewriting it.
+- Data-related logic – Keep logic tied to the data inside the model itself (e.g., formatting names, checking passwords).
+- Cleaner controllers – Controllers stay simple, because the model handles its own work.
+- Encapsulation – The schema “knows” how to work with its own data.
+
+* Middleware is like a security guard, translator, and helper all in one — it checks, changes, or stops requests before they reach your actual route.
+- req → the request object
+- res → the response object
+- next → a function you call to pass control to the next middleware

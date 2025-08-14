@@ -6,6 +6,7 @@ const { validateSignUpData } = require("./utils/validation");
 const bcrypt = require("bcrypt");
 const cookieParser = require("cookie-parser");
 const JWT = require("jsonwebtoken");
+const { userAuth } = require("./middlewares/auth");
 
 app.use(server.json())
 app.use(cookieParser());
@@ -50,14 +51,14 @@ app.post("/login", async (req,res) => {
         const {email, password} = req.body;
         const user = await UserModel.findOne({email});
         if(user){
-            const result = await bcrypt.compare(password, user.password);
+            const result = await user.validatePassword(password, user.password);
             if(result){
                 //Logic of cookie
                 //Create JWT token
-                const token = await JWT.sign({_id: user._id}, "DEV@tinder123");//DEV@tinder123 is the password only server knows
-
+                // const token = await JWT.sign({_id: user._id}, "DEV@tinder123", {expiresIn: "1d"});//DEV@tinder123 is the password only server knows
+                const token = await user.getJWTToken();
                 //Add the token to cookie and send the response back to user
-                res.cookie("token",token);
+                res.cookie("token",token, {expires: new Date(Date.now() + 24 * 60 * 60 * 1000), httpOnly: true});//cookie will expire in 1 day, 
                 return res.send("Login successful");
             }else{
                 throw new Error("Invalid credentials");
@@ -71,24 +72,50 @@ app.post("/login", async (req,res) => {
 });
 
 //get profile
-app.get("/profile", async (req, res) => {
+app.get("/profile", userAuth,async (req, res) => {
     try{
-        const cookie = req.cookies.token;
-        if(!cookie){
-            return res.status(403).send("unauthorised");
+        // const cookie = req.cookies.token;
+        // if(!cookie){
+        //     return res.status(403).send("unauthorised");
+        // }
+        // console.log(cookie)
+        // const users = await UserModel.find({email: req.body.email});
+        // if(users.length === 0){
+        //     res.status(404).send("User not found");
+        // }else{
+        //     res.send(users);
+        // }
+
+        //second class code
+        // const cookies = req.cookies;
+        // const {token} = cookies;
+
+        // if(!token){
+        //     throw new Error("Invalid token");
+        // }
+
+        // const decoded = await JWT.verify(token, "DEV@tinder123");
+        const user = req.user;
+        if(!user){
+            return res.status(404).send("User not found");
         }
-        console.log(cookie)
-        const users = await UserModel.find({email: req.body.email});
-        if(users.length === 0){
-            res.status(404).send("User not found");
-        }else{
-            res.send(users);
-        }
+
+        return res.send(user);
+
     }catch(err){
         res.send(err);
     }
 });
 
+//Send connection request
+app.post("/sendConnectionRequest", userAuth, async (req, res) => {
+    try{   
+        res.status(200).send("Connection request sent");
+    }catch(err){
+        res.send(err);
+    }
+})
+        
 //find user by email
 app.get("/userData", async (req, res) => {
     try{

@@ -1,6 +1,8 @@
 const { default: mongoose } = require("mongoose");
 const database = require("mongoose");
 const validator = require("validator");
+const JWT = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 const userSchema = new mongoose.Schema({ //schema for user collection
     firstName: {
@@ -166,6 +168,31 @@ const userSchema = new mongoose.Schema({ //schema for user collection
     //     default: Date.now
     // },
 }, {timestamps: true});
+
+
+//best practices
+//don't use arrow function it will break the code here, use normal function
+/*
+Because in Mongoose schema methods and hooks, 
+this should refer to the document or query — arrow functions don’t bind their own this, 
+so it won’t work. Use a normal function so this points to the right object.
+
+This code adds a method getJWTToken to the userSchema that generates a JSON Web Token (JWT) for a user. 
+The token is signed with a secret key ("DEV@tinder123") and expires in 1 day. 
+The method returns the generated token.
+*/
+userSchema.methods.getJWTToken = async function(){
+    const user = this;
+    const token = await JWT.sign({_id: user._id}, "DEV@tinder123", {expiresIn: "1d"});
+    return token;
+}
+
+//password encryption
+userSchema.methods.validatePassword = async function(password){
+    const user = this;
+    const result = await bcrypt.compare(password, user.password);
+    return result;
+}
 
 //model
 const UserModel = mongoose.model("User", userSchema);
