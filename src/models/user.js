@@ -5,6 +5,7 @@ const JWT = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 const userSchema = new mongoose.Schema({ //schema for user collection
+
     firstName: {
         type: String,
         required: true,
@@ -17,7 +18,7 @@ const userSchema = new mongoose.Schema({ //schema for user collection
         minLength: 3,
         maxLength: 20
     },
-    email: {
+    email: {//mongo db automaticaly create index to optimize the query for unique: true coloumn.
         type: String,
         required: true,
         unique: true,

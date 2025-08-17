@@ -133,7 +133,6 @@ profileRouter.patch("/updateUserData/:userId", async (req, res) => {
 profileRouter.patch("/profile/editProfile/:userId", userAuth, async (req, res) => {
     try{
         validateEditProfileData(req, res);
-        console.log("hiiiiii")
         //fetch and update the data here
         const user = await UserModel.findByIdAndUpdate({_id: req.params.userId}, req.body, {returnDocument: "before", runValidators: true});
         if(user == null){

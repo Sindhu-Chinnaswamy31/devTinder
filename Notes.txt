@@ -536,3 +536,18 @@ res.clearCookie("token", null, { //clearing the cookie
     expires: new Date(Date.now()),
     httpOnly: true
 }).send("Logout successful");// chaining here
+
+
+--------------------------------------
+logical DB queries session - 12
+--------------------------------------
+* enum : when you want to restrict the user with some values we can use ENUM datatype.
+* schema pre : pre is function on schema of middleware. 
+
+* how to put index in database
+  - if we create index in database, query will be optimised.
+  - mongo db automaticaly create index to optimize the query for unique: true coloumn.
+  - either set (unique: true or index: true) to any coloumn you want.
+  - compound index : 
+    - compound index, 1 means asc order, -1 means desc order
+    - connectionRequestSchema.index({fromUserId: 1, toUserId: 1}, {unique: true});
