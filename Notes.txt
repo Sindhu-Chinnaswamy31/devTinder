@@ -526,3 +526,13 @@ Main uses:
 - req → the request object
 - res → the response object
 - next → a function you call to pass control to the next middleware
+
+--------------------------------------
+express router APIs session - 11
+--------------------------------------
+* logout code
+
+res.clearCookie("token", null, { //clearing the cookie
+    expires: new Date(Date.now()),
+    httpOnly: true
+}).send("Logout successful");// chaining here

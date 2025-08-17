@@ -29,6 +29,19 @@ const validateSignUpData = (req, res) => {
     }
 }
 
+const validateEditProfileData = (req, res) => {
+    const ALLOWED_EDIT_FIELDS = ["firstName", "lastName", "bio", "phoneNumber", "age", "interestedIn"];
+    Object.keys(req.body).forEach((key) => {
+        if(!ALLOWED_EDIT_FIELDS.includes(key)){
+            return res.status(400).json({
+                error: "Update not allowed for these fields",
+                fields: invalidFields
+            });
+        }
+    });
+}
+
 module.exports = {
-    validateSignUpData
+    validateSignUpData,
+    validateEditProfileData
 }
