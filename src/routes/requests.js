@@ -50,6 +50,48 @@ requestsRouter.post("/request/send/:status/:toUserId", userAuth, async (req, res
     }catch(err){
         res.send(err.message);
     }
-})
+});
+
+//reject or accept the request
+requestsRouter.post("/request/review/:status/:requestId", userAuth, async (req, res) => {
+    try{
+        const loggedInUserId = req.user._id;
+        //is reciver logedin User or not
+        //status should be definetly intrested
+        const status = req.params.status;
+        const requestId = req.params.requestId;
+
+        const allowedSatauses = ["accepted","rejected"];
+        if(!allowedSatauses.includes(status)){
+            return res.status(400).send("Invalid status type " + status);
+        }
+
+        const connectionRequest = await ConnectionRequest.findOne({
+            fromUserId:requestId,
+            toUserId: loggedInUserId,
+            status: "intrested"
+        });
+        if(!connectionRequest){
+            return res.status(400).send("Connection request not found");
+        }
+
+        if(connectionRequest.toUserId != loggedInUserId){
+            return res.status(403).send("Please login before accept/reject the conection request");
+        }
+
+        connectionRequest.status = status;
+        const data = await connectionRequest.save();
+        return res.json({
+            data: data,
+            message: "Connection request updated successfully"
+        });
+        
+    }catch(err){
+        res.send(err.message);
+    }
+});
+
+
+
 
 module.exports = requestsRouter;

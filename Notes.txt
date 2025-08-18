@@ -551,3 +551,8 @@ logical DB queries session - 12
   - compound index : 
     - compound index, 1 means asc order, -1 means desc order
     - connectionRequestSchema.index({fromUserId: 1, toUserId: 1}, {unique: true});
+
+
+--------------------------------------
+process of writing APIs session - 13
+--------------------------------------
