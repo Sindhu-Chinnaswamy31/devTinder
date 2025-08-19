@@ -66,8 +66,8 @@ userRouter.get("/user/feed", userAuth, async (req, res) => {
         // he shouldn't see the users that are blocked/ignored by him
 
         const loggedInUser = req.user;
-        const page = parseInt(req.params.page) || 1;
-        const limit = parseInt(req.params.limit) || 10;
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
         const skip = (page - 1) * limit;
 
         //find all connection request either sent/recived
