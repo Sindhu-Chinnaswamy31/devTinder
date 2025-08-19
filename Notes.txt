@@ -556,3 +556,13 @@ logical DB queries session - 12
 --------------------------------------
 process of writing APIs session - 13
 --------------------------------------
+
+--------------------------------------
+Feed Api and pagination session - 14
+--------------------------------------
+Set datastructure is like an array. Set()
+example: [A, B, C,D]//can't add duplicated values, it will always contain unique value.
+$nin => not in this array.
+$ne => not equal to.
+
+

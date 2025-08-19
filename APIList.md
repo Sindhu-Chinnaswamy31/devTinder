@@ -25,3 +25,14 @@ userRouter
 
 Status -------> ignored, accepted, blocked, active, rejected, intrested
 
+Pagination:
+/feed?page=1&limit=10 => first ten users from 1-10
+
+/feed?page=2&limit=10 => second ten users from 11-20
+
+/feed?page=3&limit=10 => third ten users from 20-30
+
+we need to pass like this insted of page and limit
+.skip() -> how many doc skip from the skip
+.limit() -> set the limit of doc
+

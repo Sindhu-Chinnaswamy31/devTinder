@@ -3,6 +3,7 @@ const userRouter = express.Router();
 const { userAuth } = require("../middlewares/auth");
 const { Connection } = require("mongoose");
 const ConnectionRequests = require("../models/connectionRequest");
+const User = require("../models/user");
 
 const USER_SAFE_DATA = ["_id", "firstName", "lastName", "email"];
 
@@ -55,5 +56,51 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
         res.send(err.message);
     }
 });
+
+//feed api
+userRouter.get("/user/feed", userAuth, async (req, res) => {
+    try{
+        // user should see all the user card except his own card, and rejected by him users
+        // he shouldn't see the users on his connection request
+        // he shouldn't see the users that have sent connection request to him
+        // he shouldn't see the users that are blocked/ignored by him
+
+        const loggedInUser = req.user;
+        const page = parseInt(req.params.page) || 1;
+        const limit = parseInt(req.params.limit) || 10;
+        const skip = (page - 1) * limit;
+
+        //find all connection request either sent/recived
+        const connectionRequests = await ConnectionRequests.find({
+            $or: [
+                {
+                    fromUserId: loggedInUser._id
+                },
+                {
+                    toUserId: loggedInUser._id
+                }
+            ]
+        }).select("fromUserId toUserId status").populate("fromUserId", USER_SAFE_DATA).populate("toUserId", USER_SAFE_DATA);
+
+        const hideUsersFromFeed = new Set();//datastructure
+        connectionRequests.forEach((req) => {
+                hideUsersFromFeed.add(req.toUserId._id.toString());
+                hideUsersFromFeed.add(req.fromUserId._id.toString());
+        });
+
+        const users = await User.find({
+            $and: [
+                {_id: { $nin: Array.from(hideUsersFromFeed)}}, 
+                {_id: { $ne: loggedInUser._id }}
+            ]
+        }).select(USER_SAFE_DATA).skip(skip).limit(limit);
+
+        res.send(users)
+
+    }catch(err){
+        res.send(err.message);
+    }
+})
+
 
 module.exports = userRouter;
