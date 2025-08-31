@@ -566,3 +566,8 @@ $nin => not in this array.
 $ne => not equal to.
 
 
+--------------------------------------
+devTinder - 1
+--------------------------------------
+* here we are using vite, it is a bundler.(tranding build tool)
+* npm create vite@latest projectName -- --template tempalteName
