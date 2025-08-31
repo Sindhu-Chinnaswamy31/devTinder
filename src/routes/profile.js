@@ -58,7 +58,7 @@ profileRouter.get("/userData", async (req, res) => {
 //feed API - Get / feed get all the user from the database
 profileRouter.get("/feed", async (req, res) => {
     try{
-        const users = await UserModel.findOne();//find also work
+        const users = await UserModel.find();//find also work
         if(users.length === 0){
             res.status(404).send("User not found");
         }else{
@@ -134,11 +134,14 @@ profileRouter.patch("/profile/editProfile/:userId", userAuth, async (req, res) =
     try{
         validateEditProfileData(req, res);
         //fetch and update the data here
-        const user = await UserModel.findByIdAndUpdate({_id: req.params.userId}, req.body, {returnDocument: "before", runValidators: true});
+        const user = await UserModel.findByIdAndUpdate({_id: req.params.userId}, req.body, {returnDocument: "after", runValidators: true});
         if(user == null){
             res.status(404).send("User not found");
         }else{
-            res.status(200).send("User updated successfully");
+            res.status(200).json({
+                message: "User saved successfully",
+                user: user
+            });
         }
         
     }catch(err){
