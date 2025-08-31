@@ -61,13 +61,12 @@ requestsRouter.post("/request/review/:status/:requestId", userAuth, async (req, 
         const status = req.params.status;
         const requestId = req.params.requestId;
 
-        const allowedStatuses = ["ignored", "interested"]; 
+        const allowedStatuses = ["rejected", "accepted"]; 
         if (!allowedStatuses.includes(status.toLowerCase())) {
             return res.status(400).send("Invalid status type " + status);
         }
-
         const connectionRequest = await ConnectionRequest.findOne({
-            fromUserId:requestId,
+            _id:requestId,
             toUserId: loggedInUserId,
             status: "interested"
         });
@@ -75,9 +74,11 @@ requestsRouter.post("/request/review/:status/:requestId", userAuth, async (req, 
             return res.status(400).send("Connection request not found");
         }
 
-        if(connectionRequest.toUserId != loggedInUserId){
-            return res.status(403).send("Please login before accept/reject the conection request");
-        }
+        console.log(connectionRequest);
+
+        // if(connectionRequest.toUserId != loggedInUserId){
+        //     return res.status(403).send("Please login before accept/reject the conection request");
+        // }
 
         connectionRequest.status = status;
         const data = await connectionRequest.save();

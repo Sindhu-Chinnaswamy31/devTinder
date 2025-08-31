@@ -13,8 +13,8 @@ userRouter.get("/user/requests/recivied", userAuth, async (req, res) => {
         const loggedInUser = req.user;
         const connectionRequests = await ConnectionRequests.find({
             toUserId: loggedInUser._id,
-            status: "intrested"
-        }).populate("fromUserId", "firstName lastName").populate("toUserId", USER_SAFE_DATA);//like this also we can call
+            status: "interested"
+        }).populate("fromUserId", USER_SAFE_DATA).populate("toUserId", USER_SAFE_DATA);//like this also we can call
         //populate("fromUserId", ["firstName", "lastName"]);// if we didn't pass second paramas it will give all the data of the user
         res.json({
             data: connectionRequests
