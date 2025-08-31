@@ -2,6 +2,7 @@ const express = require("express");
 const profileRouter = express.Router();
 const { userAuth } = require("../middlewares/auth");
 const UserModel = require("../models/user");
+const ConnectionRequest = require("../models/connectionRequest");
 const { validateEditProfileData } = require("../utils/validation");
 // const JWT = require("jsonwebtoken");
 
@@ -55,19 +56,34 @@ profileRouter.get("/userData", async (req, res) => {
     }
 })
 
-//feed API - Get / feed get all the user from the database
-profileRouter.get("/feed", async (req, res) => {
-    try{
-        const users = await UserModel.find();//find also work
-        if(users.length === 0){
-            res.status(404).send("User not found");
-        }else{
-            res.send(users);
-        }
-    }catch(err){
-        res.send(err);
+profileRouter.get("/feed",userAuth, async (req, res) => {
+  try {
+    const allowedStatuses = ["ignored", "interested", "accepted", "rejected"];
+
+    const loggedInUserId = req.user._id; // assuming req.user is set by auth middleware
+
+    // find all users that this logged-in user already interacted with
+    const requestedUserIds = await ConnectionRequest.find({
+      fromUserId: loggedInUserId,
+      status: { $in: allowedStatuses }
+    }).distinct("toUserId");
+
+    // now exclude them + also exclude the logged-in user from feed
+    const users = await UserModel.find({
+      _id: { $nin: [...requestedUserIds, loggedInUserId] }
+    });
+
+    if (users.length === 0) {
+      return res.status(404).send("No new users found for feed");
     }
+
+    res.send(users);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Something went wrong");
+  }
 });
+
 
 //get by id
 profileRouter.get("/findById", async (req, res) => {

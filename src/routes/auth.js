@@ -32,8 +32,14 @@ authRouter.post("/signUp", async (req, res) => {
             }
         );
         // const user = new UserModel(req.body); //insted of using userObj we are using post data
-        await user.save(); // instance of model
-        res.send("User added succesfully!");
+        const userData =  await user.save(); // instance of model
+        const token = await user.getJWTToken();
+        res.cookie("token",token, {expires: new Date(Date.now() + 24 * 60 * 60 * 1000), httpOnly: true});//cookie will expire in 1 day, 
+                
+        res.send({
+            user: userData,
+            message: "User added successfully"
+        });
     }catch(err){
        res.status(400).send(err.message);
     }

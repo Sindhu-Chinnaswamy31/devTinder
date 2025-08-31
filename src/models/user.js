@@ -43,11 +43,11 @@ const userSchema = new mongoose.Schema({ //schema for user collection
     },
     phoneNumber: {
         type: Number,
-        required: true
+        required: false
     },
     gender: {
         type: String,
-        required: true,
+        required: false,
         validate(value) {
             if(value !== "male" && value !== "female" && value !== "other"){
                 throw new Error("Gender should be male, female or other");
@@ -56,7 +56,7 @@ const userSchema = new mongoose.Schema({ //schema for user collection
     },
     age: {
         type: Number,
-        required: true,
+        required: false,
         max: 80,
         min: 18
     },
@@ -79,7 +79,7 @@ const userSchema = new mongoose.Schema({ //schema for user collection
     },
     status: {
         type: String,
-        required: true
+        required: false
     },
     isVerified: {
         type: Boolean,
