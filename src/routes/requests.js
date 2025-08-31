@@ -12,9 +12,9 @@ requestsRouter.post("/request/send/:status/:toUserId", userAuth, async (req, res
         const toUserId = req.params.toUserId;
         const status = req.params.status;
 
-        const allowedSatauses = ["ignored","intrested"];
-        if(!allowedSatauses.includes(status)){
-            return res.status(400).send("Invalid status type" + status);
+        const allowedStatuses = ["ignored", "interested"]; 
+        if (!allowedStatuses.includes(status.toLowerCase())) {
+        return res.status(400).send("Invalid status type: " + status);
         }
 
         //if the to user is exist or not
@@ -61,15 +61,15 @@ requestsRouter.post("/request/review/:status/:requestId", userAuth, async (req, 
         const status = req.params.status;
         const requestId = req.params.requestId;
 
-        const allowedSatauses = ["accepted","rejected"];
-        if(!allowedSatauses.includes(status)){
+        const allowedStatuses = ["ignored", "interested"]; 
+        if (!allowedStatuses.includes(status.toLowerCase())) {
             return res.status(400).send("Invalid status type " + status);
         }
 
         const connectionRequest = await ConnectionRequest.findOne({
             fromUserId:requestId,
             toUserId: loggedInUserId,
-            status: "intrested"
+            status: "interested"
         });
         if(!connectionRequest){
             return res.status(400).send("Connection request not found");
