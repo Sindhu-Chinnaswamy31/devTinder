@@ -5,6 +5,8 @@ const ConnectionRequest = require("../models/connectionRequest");
 const User = require("../models/user");
 // const JWT = require("jsonwebtoken");
 
+const sendEmail = require("../utils/sendEmail");
+
 //Send connection request
 requestsRouter.post("/request/send/:status/:toUserId", userAuth, async (req, res) => {
     try{ 
@@ -42,6 +44,14 @@ requestsRouter.post("/request/send/:status/:toUserId", userAuth, async (req, res
         });
 
         const data = await connectionRequest.save();
+        
+        const EmailResponse = await sendEmail.run(
+            toUser.email,
+            "New connection request",
+            `You have a new connection request from ${fromUserId} ${fromUserId.firstName} ${fromUserId.lastName}`
+        );
+        console.log(EmailResponse);
+
         return res.json({
             data: data,
             message: "Connection request sent successfully"
