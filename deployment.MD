@@ -167,3 +167,8 @@ https://aws.amazon.com/ses/
 -> Inatall AWS SDK - V3 -> npm install @aws-sdk/client-ses
 -> SES configration file - V3
 /Users/sindhuc/Sindhu/NodeJS Projects/devTinder/src/utils/sesClient.js
+
+
+----------------------------------------------------
+Keeping Our Credentials Safe Using dotenv Files
+----------------------------------------------------
