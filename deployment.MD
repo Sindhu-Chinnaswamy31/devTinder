@@ -127,3 +127,43 @@ Modify the front end base url "/api"
 >> npm run build
 >> sudo scp -r dist/* /var/www/html/
 >> ready to use application
+
+--------------------------------------------
+Adding a Custom Domain Name
+--------------------------------------------
+domain provider - godaddy
+-> after purchaing the domain 
+-> go to dashboard -> DNS
+-> we use https://www.cloudflare.com/en-in/ in between godady and domain
+-> in go daddy change the anme server to cloudeflare.
+-> cloudflare will get access to DNS
+-> DNS, domain Regista, Namesapce -> know all this stuff
+-> how to use ssl
+
+-> purchased domain name from godaddy
+-> signup on cloudeflare
+-> change the nameservers on godaddy and point it to cloudeflare
+-> wait for sometimes till your nameserverupdate
+-> DNS record: a devtinder.in ipaddress
+-> Enable SSL for website
+
+infynit free - https://dash.infinityfree.com/accounts/if0_39843867
+username - if0_39843867 
+password - dq4xqj9GQGZiny
+
+
+-------------------------------------------------------------------
+Sending Emails using Amazon SES
+-------------------------------------------------------------------
+-> signup for amazon SES (simple email service)
+https://aws.amazon.com/ses/ 
+-> IAM -> giveing permission to user
+-> Create a IAM user
+-> Give Access to amazonSESFullAccess
+-> Amazon SES: Create an Identity
+-> Verify your domain name
+-> Verify your email address
+
+-> Inatall AWS SDK - V3 -> npm install @aws-sdk/client-ses
+-> SES configration file - V3
+/Users/sindhuc/Sindhu/NodeJS Projects/devTinder/src/utils/sesClient.js
