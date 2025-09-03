@@ -206,3 +206,5 @@ cron.schedule("0 8 * * *", async () => {
 -> date fns npm 
 date-fns provides the most comprehensive, yet simple and consistent toolset for manipulating JavaScript dates in a browser & Node.js
 - npm i date-fns
+- make email queue (send by batches)
+  bee-queue, bullMq
