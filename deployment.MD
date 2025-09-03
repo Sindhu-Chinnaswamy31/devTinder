@@ -172,3 +172,37 @@ https://aws.amazon.com/ses/
 ----------------------------------------------------
 Keeping Our Credentials Safe Using dotenv Files
 ----------------------------------------------------
+-> npm i dotenv
+-> require("dotenv").config(); - app.js
+-> process.env.JWT_SECRET - use like this 
+-> sudo nano .env
+-> read about using multiple environment
+
+-----------------------------------------------------
+Scheduling Cron Jobs
+-----------------------------------------------------
+-> Everyday mrng at 8 AM, they will get mail you have recevied a request.
+-> npm i node-cron -> package to sceduling cron
+-> Every second it will run
+cron.schedule("* * * * * *", () => {
+    //console.log("Application running.....")
+})
+
+-> This job will run at 8 AM in the morning everyday
+cron.schedule("0 8 * * *", async () => {
+})
+ # ┌────────────── second (optional)
+ # │ ┌──────────── minute
+ # │ │ ┌────────── hour
+ # │ │ │ ┌──────── day of month
+ # │ │ │ │ ┌────── month
+ # │ │ │ │ │ ┌──── day of week
+ # │ │ │ │ │ │
+ # │ │ │ │ │ │
+ # * * * * * *
+
+ -> [Crontab guru](https://crontab.guru/) -> we can check out cron
+
+-> date fns npm 
+date-fns provides the most comprehensive, yet simple and consistent toolset for manipulating JavaScript dates in a browser & Node.js
+- npm i date-fns
