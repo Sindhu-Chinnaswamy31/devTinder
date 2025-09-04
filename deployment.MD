@@ -208,3 +208,17 @@ date-fns provides the most comprehensive, yet simple and consistent toolset for 
 - npm i date-fns
 - make email queue (send by batches)
   bee-queue, bullMq
+
+---------------------------------------------------
+Payment Gateway Integration ft. Razorpay
+---------------------------------------------------
+to do payment we need to do below steps
+- create order 
+- payment verification
+- we need to create two api
+  - craeet order API
+  - payment verification verify
+
+# Razor payment gatway integraion
+    - Signup on razorpay and complete KYC
+
