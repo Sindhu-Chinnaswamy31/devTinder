@@ -221,4 +221,15 @@ to do payment we need to do below steps
 
 # Razor payment gatway integraion
     - Signup on razorpay and complete KYC
+    - npm i razorpay
+    - create a UI for razorpay 
+    - intialize razore pay in utils
+    - creating order on Razorpay
+    - create Schema and model
+    - saved teh order in payments collection
+    - make the API dynamic
+    - Setwebhook
+      - account & settings >> webhook > Add new webhook > Add your cron.
+      -  ngrok to test cron (razor pay)
+    
 

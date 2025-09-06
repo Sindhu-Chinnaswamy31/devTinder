@@ -163,11 +163,14 @@ const userSchema = new mongoose.Schema({ //schema for user collection
             }
         }
     },
-    // createAt: {
-    //     type: Date,
-    //     required: false,
-    //     default: Date.now
-    // },
+    isPremium: {
+        type: Boolean,
+        default: false,
+    },
+    membershipType: {
+        type: String,
+        required: false
+    }
 }, {timestamps: true});
 
 
