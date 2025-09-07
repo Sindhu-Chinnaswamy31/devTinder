@@ -231,5 +231,11 @@ to do payment we need to do below steps
     - Setwebhook
       - account & settings >> webhook > Add new webhook > Add your cron.
       -  ngrok to test cron (razor pay)
-    
 
+
+# Web Sockets & socket.io
+  - ref : https://socket.io/docs/v4/
+  - Socket.IO is a library that enables low-latency, bidirectional and event-based communication between a client and a server.
+
+  - npm install socket.io
+  - 
