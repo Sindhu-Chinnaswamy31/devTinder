@@ -30,19 +30,19 @@ const initializeSocket = (server) => {
             try{
                 const roomId = getSecretRoomId(userId, targetUserid);
                 //check if the connection request is accepted
-                connectionRequest.findOne({
-                    status: "accepted",
-                    $or: [
-                        { fromUserId: userId, toUserId: targetUserid },
-                        { fromUserId: targetUserid, toUserId: userId }
-                    ]
-                });
+                // connectionRequest.findOne({
+                //     status: "accepted",
+                //     $or: [
+                //         { fromUserId: userId, toUserId: targetUserid },
+                //         { fromUserId: targetUserid, toUserId: userId }
+                //     ]
+                // });
 
-                if (connection) {
-                    console.log("Connection exists and is accepted.");
-                } else {
-                    console.log("No accepted connection.");
-                }
+                // if (connection) {
+                //     console.log("Connection exists and is accepted.");
+                // } else {
+                //     console.log("No accepted connection.");
+                // }
 
                 let chat = await Chat.findOne({
                     participants: {$all: [userId, targetUserid]}
