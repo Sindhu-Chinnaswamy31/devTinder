@@ -99,6 +99,10 @@ it will run the project if you close the commnad also so
 Front end - http://13.61.148.97/
 Back end - http://13.61.148.97:8000/
 
+Local : 
+Front end - http://localhost:5173/
+Back end - http://localhost:5173:8000/
+
 * To map the ngnix proxy pass /api to 8000 node application
 
 >> sudo nano /etc/nginx/sites-available/default
