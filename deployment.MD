@@ -237,5 +237,5 @@ to do payment we need to do below steps
   - ref : https://socket.io/docs/v4/
   - Socket.IO is a library that enables low-latency, bidirectional and event-based communication between a client and a server.
 
-  - npm install socket.io
-  - 
+  - npm install socket.io -> backend
+  - npm i socket.io-client -> frontend

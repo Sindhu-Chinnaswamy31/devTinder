@@ -3,6 +3,8 @@ const connectDB = require("./config/database");
 const app = server();
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const http = require("http");
+const initializeSocket = require("./utils/socket");
 
 require("dotenv").config();
 require("./utils/cronJob");
@@ -21,17 +23,22 @@ const requestRouter = require("./routes/requests");
 const profileRouter = require("./routes/profile");
 const userRouter = require("./routes/user");
 const paymentRouter = require("./routes/payment");
+const chatRouter = require("./routes/chat");
 
 app.use("/", authRouter);
 app.use("/", requestRouter);
 app.use("/", profileRouter);
 app.use("/", userRouter);
 app.use("/", paymentRouter);
+app.use("/", chatRouter);
+
+const socketServer = http.createServer(app);//craeted server here
+initializeSocket(socketServer);
 
 connectDB()
     .then(() => {
         console.log("Database connected")
-        app.listen(process.env.PORT, () =>{
+        socketServer.listen(process.env.PORT, () =>{
             console.log("Server is running on port 8000");
         });
     })

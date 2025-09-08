@@ -1,7 +1,6 @@
 const express = require("express");
 const userRouter = express.Router();
 const { userAuth } = require("../middlewares/auth");
-const { Connection } = require("mongoose");
 const ConnectionRequests = require("../models/connectionRequest");
 const User = require("../models/user");
 
@@ -30,19 +29,14 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
         const loggedInUser = req.user;
         const connections = await ConnectionRequests.find({
             $or: [
-                {
-                    fromUserId: loggedInUser._id,
-                    status: "accepted"
-                },
-                {
-                    toUserId: loggedInUser._id,
-                    status: "accepted"
-                }
+                { toUserId: loggedInUser._id, status: "accepted" },
+                { fromUserId: loggedInUser._id, status: "accepted" },
             ]
-        }).populate("fromUserId", USER_SAFE_DATA);
+        }).populate("fromUserId", USER_SAFE_DATA)
+          .populate("toUserId", USER_SAFE_DATA);
 
         const data = connections.map((connection) => {
-            if(connection.fromUserId._id == loggedInUser._id){
+            if (connection.fromUserId._id.toString() === loggedInUser._id.toString()) {
                 return connection.toUserId;
             }else{
                 return connection.fromUserId;
@@ -50,7 +44,7 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
         });
 
         res.json({
-            data: connections
+            data: data
         });
     }catch(err){
         res.send(err.message);
